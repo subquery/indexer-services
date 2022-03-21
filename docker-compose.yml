@@ -34,6 +34,7 @@ services:
     command:
       - --network=testnet
       - --ws-endpoint=https://sqtn.api.onfinality.io/public
+      - --host=localhost
       - --postgres-host=postgres
       - --postgres-database=postgres
       - --postgres-port=5432
@@ -56,13 +57,13 @@ services:
     image: onfinality/subql-indexer-proxy
     container_name: coordinator_proxy
     ports:
-      - 8001:8001
+      - 80:80
     depends_on:
       "coordinator-service":
         condition: service_healthy
     restart: always
     command:
-      - --port=8001
+      - --port=80
       - --host=0.0.0.0
       - --secret-key=qmbyd5hwac2jdcu
       - --service-url=http://coordinator-service:8000/graphql
