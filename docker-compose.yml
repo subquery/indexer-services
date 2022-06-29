@@ -8,8 +8,10 @@ services:
       - 5432:5432
     volumes:
       - .data/postgres:/var/lib/postgresql/data
+      - ./init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
     environment:
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: pos_8_Tgres # replace with you own password
+      POSTGRES_USER: You_Db_uSer_NaMe # replace with you own db user
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 5s
@@ -17,7 +19,7 @@ services:
       retries: 5
 
   coordinator-service:
-    image: onfinality/subql-coordinator:v0.1.10
+    image: onfinality/subql-coordinator:v0.3.1
     container_name: coordinator_service
     ports:
       - 8000:8000
@@ -32,11 +34,14 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     command:
       - --network=testnet
-      - --ws-endpoint=https://sqtn.api.onfinality.io/public
+      - --ws-endpoint=https://tc7-eth.aca-dev.network
       - --postgres-host=postgres
       - --postgres-database=postgres
+      - --postgres-username=You_Db_uSer_NaMe # use the same user in the db config
+      - --postgres-password=pos_8_Tgres      # use the same password in the db config
       - --postgres-port=5432
       - --port=8000
+      - --debug
     healthcheck:
       test:
         [
@@ -52,7 +57,7 @@ services:
       timeout: 5s
       retries: 5
   proxy-server:
-    image: onfinality/subql-indexer-proxy:v0.1.7
+    image: onfinality/subql-indexer-proxy:v0.2.0
     container_name: coordinator_proxy
     ports:
       - 80:80
@@ -63,8 +68,10 @@ services:
     command:
       - --port=80
       - --host=0.0.0.0
+      - --auth
+      - --token-duration=8 # query auth token validity [hours]
       - --secret-key=qmbyd5hwac2jdcu
       - --service-url=http://coordinator-service:8000/graphql
 networks:
   default:
-    name: cooridnator-service
+    name: coordinator-service
