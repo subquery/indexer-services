@@ -22,8 +22,7 @@ services:
     ports:
       - 8000:8000
     depends_on:
-      "postgres":
-        condition: service_healthy
+      - postgres
     restart: always
     volumes:
       - /var/tmp/composeFiles:/var/tmp/composeFiles
@@ -56,8 +55,7 @@ services:
     ports:
       - 80:80
     depends_on:
-      "coordinator-service":
-        condition: service_healthy
+      - coordinator-service
     restart: always
     command:
       - --port=80
