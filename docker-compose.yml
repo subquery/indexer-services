@@ -64,6 +64,4 @@ services:
       - --token-duration=8 # query auth token validity [hours]
       - --secret-key=qmbyd5hwac2jdcu
       - --service-url=http://coordinator-service:8000/graphql
-networks:
-  default:
-    name: coordinator-service
+
