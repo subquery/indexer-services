@@ -17,7 +17,7 @@ services:
       retries: 5
 
   coordinator-service:
-    image: onfinality/subql-coordinator:v0.3.3
+    image: onfinality/subql-coordinator:v0.3.6
     container_name: coordinator_service
     ports:
       - 8000:8000
