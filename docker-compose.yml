@@ -61,7 +61,7 @@ services:
       test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
 
   proxy-server:
-    image: onfinality/subql-indexer-proxy:v0.3.0-1
+    image: onfinality/subql-indexer-proxy:latest
     container_name: coordinator_proxy
     ports:
       - 80:80
