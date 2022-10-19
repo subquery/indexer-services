@@ -74,6 +74,7 @@ services:
       - --host=0.0.0.0
       - --auth
       - --debug
+      - --jwt-secret=vOVH6sdmpNWjRRIqCc7rdxs
       - --network=moonbase
       - --network-endpoint=https://moonbeam-alpha.api.onfinality.io/public
       - --redis-endpoint=redis://coordinator_cache
