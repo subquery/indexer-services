@@ -81,6 +81,7 @@ services:
       - --token-duration=8 # query auth token validity [hours]
       - --secret-key=vOVH6sdmpNWjRRIqCc7rdxs01lwHzfr3
       - --service-url=http://coordinator-service:8000
+      - --bootstrap=/ip4/210.55.152.69/tcp/7370 # if more, like: bootstrap=/ip4/210.55.152.69/tcp/7370,/ip4/210.55.152.69/tcp/7370
 networks:
   default:
     name: coordinator-service
