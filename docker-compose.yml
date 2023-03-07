@@ -9,7 +9,7 @@ services:
     volumes:
       - .data/postgres:/var/lib/postgresql/data
     environment:
-      POSTGRES_PASSWORD: pos_z8X_Tgres # replace with you own password
+      POSTGRES_PASSWORD: pos_z8X # replace with you own password
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 5s
@@ -17,7 +17,7 @@ services:
       retries: 5
 
   coordinator-service:
-    image: onfinality/subql-coordinator:v0.4.2-0
+    image: onfinality/subql-coordinator:v0.4.6
     container_name: coordinator_service
     ports:
       - 8000:8000
@@ -29,10 +29,10 @@ services:
       - /var/tmp/composeFiles:/var/tmp/composeFiles
       - /var/run/docker.sock:/var/run/docker.sock
     command:
-      - --network=moonbase
-      - --ws-endpoint=https://moonbeam-alpha.api.onfinality.io/public
+      - --network=testnet
       - --postgres-host=postgres
-      - --postgres-password=pos_z8X_Tgres      # use the same password in the db config
+      - --postgres-password=pos_z8X
+      # use the same password in the db config
       - --postgres-port=5432
       - --port=8000
       - --debug
@@ -61,7 +61,7 @@ services:
       test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
 
   proxy-server:
-    image: onfinality/subql-indexer-proxy:latest
+    image: onfinality/subql-indexer-proxy:v0.3.2
     container_name: coordinator_proxy
     ports:
       - 80:80
@@ -75,14 +75,14 @@ services:
       - --auth
       - --debug
       - --jwt-secret=vOVH6sdmpNWjRRIqCc7rdxs
-      - --network=moonbase
-      - --network-endpoint=https://moonbeam-alpha.api.onfinality.io/public
+      - --network=testnet
+      - --network-endpoint=https://polygon-mumbai.infura.io/v3/4458cf4d1689497b9a38b1d6bbf05e78
       - --redis-endpoint=redis://coordinator_cache
       - --token-duration=8 # query auth token validity [hours]
       - --secret-key=vOVH6sdmpNWjRRIqCc7rdxs01lwHzfr3
       - --service-url=http://coordinator-service:8000
-      - --bootstrap=/ip4/210.55.152.69/tcp/7370
-      # - --bootstrap=/ip4/210.55.152.69/tcp/7370 # if more, just add new line
+      - --bootstrap=210.55.152.69:7370
+      # - --bootstrap=210.55.152.69:7370 # if more, just add new line
 networks:
   default:
     name: coordinator-service
