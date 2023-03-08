@@ -65,9 +65,6 @@ services:
     container_name: coordinator_proxy
     ports:
       - 80:80
-    depends_on:
-      "coordinator-service":
-        condition: service_healthy
     restart: always
     command:
       - --port=80
