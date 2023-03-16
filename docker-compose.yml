@@ -52,11 +52,13 @@ services:
     image: grafana/grafana:latest
     container_name: indexer_grafana
     restart: always
-    user: "admin"
     depends_on:
       - prometheus
     ports:
       - 9092:9092
+    user: "472"
+    environment:
+      - GF_SERVER_HTTP_PORT=9092
 
   coordinator:
     image: onfinality/subql-coordinator:v0.4.6-3
