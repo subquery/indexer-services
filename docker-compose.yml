@@ -35,7 +35,7 @@ services:
     container_name: indexer_prometheus
     restart: always
     expose:
-      - 9091
+      - 9090
     links:
       - pushgateway:pushgateway
     depends_on:
@@ -121,4 +121,4 @@ services:
 
 networks:
   default:
-    name: coordinator
+    name: indexer_services

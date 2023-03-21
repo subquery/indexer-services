@@ -1,0 +1,58 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:12-alpine
+    container_name: indexer_db_dev
+    ports:
+      - 5432:5432
+    volumes:
+      - .data/postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: pos_z8X
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: indexer_cache_dev
+    ports:
+      - 6379:6379
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: indexer_prometheus_dev
+    ports:
+      - 9090:9090
+    links:
+      - pushgateway:pushgateway
+    depends_on:
+      - pushgateway
+
+  pushgateway:
+    image: prom/pushgateway:latest
+    container_name: indexer_pushgateway_dev
+    ports:
+      - 9091:9091
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: indexer_grafana_dev
+    depends_on:
+      - prometheus
+    ports:
+      - 9092:9092
+    user: "472"
+    environment:
+      - GF_SERVER_HTTP_PORT=9092
+
+networks:
+  default:
+    name: indexer_services
