@@ -87,7 +87,7 @@ services:
           "curl",
           "-i",
           "-X POST",
-          "http://coordinator:8000/graphql",
+          "http://indexer_coordinator:8000/graphql",
           "-H 'Content-Type: application/json'",
           "-d '{ \"query\": \"query { accountMetadata { network } }\" }'"
         ]
@@ -114,7 +114,7 @@ services:
       - --bootstrap=210.55.152.69:7370
       # - --bootstrap=210.55.152.69:7370 # if more, just add new line
       - --metrics-allowlist="0x41526BE3CDe4b0ff39A4A2908Af3527a703E9fDa" # default metrics accounts to collect query status
-      - --prometheus-endpoint=http://pushgateway # the prometheus-pushgateway endpoint, if not need, comment it
+      - --prometheus-endpoint=http://indexer_pushgateway:9091 # the prometheus-pushgateway endpoint, if not need, comment it
       # - --free-plan=60 # the limit for free query when consumer not has agreement
       # - --network=testnet # Change to other network
       # - --network-endpoint=https://polygon-mumbai.infura.io/v3/4458cf4d1689497b9a38b1d6bbf05e78 # Change default network endpoint
