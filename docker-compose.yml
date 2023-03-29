@@ -33,13 +33,11 @@ services:
   prometheus:
     image: prom/prometheus:latest
     container_name: indexer_prometheus
-    restart: always
+    command: --config.file=/etc/prometheus/prometheus.yml
     expose:
       - 9090
-    links:
-      - pushgateway:pushgateway
-    depends_on:
-      - pushgateway
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 
   pushgateway:
     image: prom/pushgateway:latest
@@ -51,14 +49,10 @@ services:
   grafana:
     image: grafana/grafana:latest
     container_name: indexer_grafana
-    restart: always
-    depends_on:
-      - prometheus
     ports:
-      - 9092:9092
-    user: "472"
+      - 3000:3000
     environment:
-      - GF_SERVER_HTTP_PORT=9092
+      - GF_SECURITY_ADMIN_PASSWORD=admin
 
   coordinator:
     image: onfinality/subql-coordinator:v0.4.8-0
