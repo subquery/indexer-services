@@ -28,31 +28,31 @@ services:
     healthcheck:
       test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
 
-  # prometheus & pushgateway & grafana are for metrics, if not need, comment it,
-  # DONOT FORGET commment `prometheus_endpoint` in indexer-proxy, if not need.
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: indexer_prometheus
-    command: --config.file=/etc/prometheus/prometheus.yml
-    expose:
-      - 9090
-    volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+  # prometheus & pushgateway & grafana are for metrics, if need, uncomment it,
+  # DONOT FORGET commment `pushgateway_endpoint` in indexer-proxy, if not need.
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   container_name: indexer_prometheus
+  #   command: --config.file=/etc/prometheus/prometheus.yml
+  #   expose:
+  #     - 9090
+  #   volumes:
+  #     - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
 
-  pushgateway:
-    image: prom/pushgateway:latest
-    container_name: indexer_pushgateway
-    restart: always
-    expose:
-      - 9091
+  # pushgateway:
+  #   image: prom/pushgateway:latest
+  #   container_name: indexer_pushgateway
+  #   restart: always
+  #   expose:
+  #     - 9091
 
-  grafana:
-    image: grafana/grafana:latest
-    container_name: indexer_grafana
-    ports:
-      - 3000:3000
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+  # grafana:
+  #   image: grafana/grafana:latest
+  #   container_name: indexer_grafana
+  #   ports:
+  #     - 3000:3000
+  #   environment:
+  #     - GF_SECURITY_ADMIN_PASSWORD=admin
 
   coordinator:
     image: onfinality/subql-coordinator:v0.4.8-0
@@ -108,7 +108,7 @@ services:
       - --bootstrap=210.55.152.69:7370
       # - --bootstrap=210.55.152.69:7370 # if more, just add new line
       - --metrics-allowlist="0x41526BE3CDe4b0ff39A4A2908Af3527a703E9fDa" # default metrics accounts to collect query status
-      - --pushgateway-endpoint=http://indexer_pushgateway:9091 # the indexer-pushgateway endpoint, if not need, comment it
+      # - --pushgateway-endpoint=http://indexer_pushgateway:9091 # the indexer-pushgateway endpoint, if need, uncomment it
       # - --free-plan=60 # the limit for free query when consumer not has agreement
       # - --network=testnet # Change to other network
       # - --network-endpoint=https://polygon-mumbai.infura.io/v3/4458cf4d1689497b9a38b1d6bbf05e78 # Change default network endpoint
