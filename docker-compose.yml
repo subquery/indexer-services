@@ -1,11 +1,5 @@
 version: "3"
 
-x-var: &SECRET_KEY
-  vOVH6sdmpNWjRRIqCc7rdxs01lwHzfr3
-
-x-var: &SECRET_JWT
-  vOVH6sdmpNWjRRIqCc7rdxs
-
 services:
   postgres:
     image: postgres:12-alpine
@@ -61,7 +55,7 @@ services:
   #     - GF_SECURITY_ADMIN_PASSWORD=admin
 
   coordinator:
-    image: onfinality/subql-coordinator:v0.4.8-0
+    image: onfinality/subql-coordinator:v0.4.8-6
     container_name: indexer_coordinator
     restart: always
     ports:
@@ -78,7 +72,7 @@ services:
       - --postgres-password=pos_z8X
       # use the same password in the db config
       - --postgres-port=5432
-      - --secret-key=*SECRET_KEY
+      - --secret-key=ThisIsYourSecret # Change to random value and keep same with proxy secret key
       - --port=8000
       - --debug
     healthcheck:
@@ -97,7 +91,7 @@ services:
       retries: 5
 
   proxy:
-    image: onfinality/subql-indexer-proxy:v0.3.3
+    image: onfinality/subql-indexer-proxy:v0.3.3-3
     container_name: indexer_proxy
     restart: always
     ports:
@@ -107,9 +101,9 @@ services:
       - --host=0.0.0.0
       - --port=80
       - --auth
-      - --jwt-secret=*SECRET_JWT
+      - --jwt-secret=ThisIsYourJWT # change to random value
       - --service-url=http://indexer_coordinator:8000
-      - --secret-key=*SECRET_KEY
+      - --secret-key=ThisIsYourSecret # keep same with coordinator secret key
       - --network=testnet
       - --network-endpoint=https://polygon-mumbai.infura.io/v3/4458cf4d1689497b9a38b1d6bbf05e78
       - --token-duration=8 # query auth token validity [hours]
