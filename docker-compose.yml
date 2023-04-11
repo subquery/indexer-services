@@ -1,5 +1,11 @@
 version: "3"
 
+x-var: &SECRET_KEY
+  vOVH6sdmpNWjRRIqCc7rdxs01lwHzfr3
+
+x-var: &SECRET_JWT
+  vOVH6sdmpNWjRRIqCc7rdxs
+
 services:
   postgres:
     image: postgres:12-alpine
@@ -72,6 +78,7 @@ services:
       - --postgres-password=pos_z8X
       # use the same password in the db config
       - --postgres-port=5432
+      - --secret-key=*SECRET_KEY
       - --port=8000
       - --debug
     healthcheck:
@@ -99,11 +106,13 @@ services:
       - --endpoint="" # Set public url here, eg. https://www.google.com
       - --host=0.0.0.0
       - --port=80
-      - --service-url=http://indexer_coordinator:8000
-      - --secret-key=vOVH6sdmpNWjRRIqCc7rdxs01lwHzfr3
       - --auth
+      - --jwt-secret=*SECRET_JWT
+      - --service-url=http://indexer_coordinator:8000
+      - --secret-key=*SECRET_KEY
+      - --network=testnet
+      - --network-endpoint=https://polygon-mumbai.infura.io/v3/4458cf4d1689497b9a38b1d6bbf05e78
       - --token-duration=8 # query auth token validity [hours]
-      - --jwt-secret=vOVH6sdmpNWjRRIqCc7rdxs
       - --redis-endpoint=redis://indexer_cache
       - --bootstrap=210.55.152.69:7370
       # - --bootstrap=210.55.152.69:7370 # if more, just add new line
