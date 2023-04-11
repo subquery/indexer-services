@@ -9,7 +9,8 @@ x-var: &SECRET_JWT
 services:
   postgres:
     image: postgres:12-alpine
-    container_name: coordinator_db
+    container_name: indexer_db
+    restart: always
     expose:
       - 5432
     volumes:
@@ -22,15 +23,52 @@ services:
       timeout: 5s
       retries: 5
 
-  coordinator-service:
+  redis:
+    image: redis:7-alpine
+    container_name: indexer_cache
+    restart: always
+    expose:
+      - 6379
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+
+  # prometheus & pushgateway & grafana are for metrics, if need, uncomment it,
+  # DONOT FORGET commment `pushgateway_endpoint` in indexer-proxy, if not need.
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   container_name: indexer_prometheus
+  #   command: --config.file=/etc/prometheus/prometheus.yml
+  #   expose:
+  #     - 9090
+  #   volumes:
+  #     - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  # pushgateway:
+  #   image: prom/pushgateway:latest
+  #   container_name: indexer_pushgateway
+  #   restart: always
+  #   expose:
+  #     - 9091
+
+  # grafana:
+  #   image: grafana/grafana:latest
+  #   container_name: indexer_grafana
+  #   ports:
+  #     - 3000:3000
+  #   environment:
+  #     - GF_SECURITY_ADMIN_PASSWORD=admin
+
+  coordinator:
     image: onfinality/subql-coordinator:v0.4.8-0
-    container_name: coordinator_service
+    container_name: indexer_coordinator
+    restart: always
     ports:
       - 8000:8000
     depends_on:
       "postgres":
         condition: service_healthy
-    restart: always
     volumes:
       - /var/tmp/composeFiles:/var/tmp/composeFiles
       - /var/run/docker.sock:/var/run/docker.sock
@@ -50,43 +88,40 @@ services:
           "curl",
           "-i",
           "-X POST",
-          "http://coordinator-service:8000/graphql",
+          "http://indexer_coordinator:8000/graphql",
           "-H 'Content-Type: application/json'",
           "-d '{ \"query\": \"query { accountMetadata { network } }\" }'"
         ]
       interval: 5s
       timeout: 5s
       retries: 5
-  proxy-redis:
-    image: redis:7-alpine
-    container_name: coordinator_cache
-    expose:
-      - 6379
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-    healthcheck:
-      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
 
-  proxy-server:
+  proxy:
     image: onfinality/subql-indexer-proxy:v0.3.3
-    container_name: coordinator_proxy
+    container_name: indexer_proxy
+    restart: always
     ports:
       - 80:80
-    restart: always
     command:
-      - --port=80
+      - --endpoint="" # Set public url here, eg. https://www.google.com
       - --host=0.0.0.0
+      - --port=80
       - --auth
-      - --debug
       - --jwt-secret=*SECRET_JWT
+      - --service-url=http://indexer_coordinator:8000
+      - --secret-key=*SECRET_KEY
       - --network=testnet
       - --network-endpoint=https://polygon-mumbai.infura.io/v3/4458cf4d1689497b9a38b1d6bbf05e78
-      - --redis-endpoint=redis://coordinator_cache
       - --token-duration=8 # query auth token validity [hours]
-      - --secret-key=*SECRET_KEY
-      - --service-url=http://coordinator-service:8000
+      - --redis-endpoint=redis://indexer_cache
       - --bootstrap=210.55.152.69:7370
       # - --bootstrap=210.55.152.69:7370 # if more, just add new line
+      - --metrics-allowlist="0x41526BE3CDe4b0ff39A4A2908Af3527a703E9fDa" # default metrics accounts to collect query status
+      # - --pushgateway-endpoint=http://indexer_pushgateway:9091 # the indexer-pushgateway endpoint, if need, uncomment it
+      # - --free-plan=60 # the limit for free query when consumer not has agreement
+      # - --network=testnet # Change to other network
+      # - --network-endpoint=https://polygon-mumbai.infura.io/v3/4458cf4d1689497b9a38b1d6bbf05e78 # Change default network endpoint
+
 networks:
   default:
-    name: coordinator-service
+    name: indexer_services
