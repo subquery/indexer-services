@@ -72,7 +72,6 @@ services:
     ports:
       - 80:80
     command:
-      - --endpoint=""                                      # Set public url here, eg. https://www.google.com
       - --host=0.0.0.0
       - --port=80
       - --auth
