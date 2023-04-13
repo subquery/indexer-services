@@ -3,7 +3,8 @@ version: "3"
 services:
   postgres:
     image: postgres:12-alpine
-    container_name: coordinator_db
+    container_name: indexer_db
+    restart: always
     expose:
       - 5432
     volumes:
@@ -16,26 +17,29 @@ services:
       timeout: 5s
       retries: 5
 
-  coordinator-service:
-    image: onfinality/subql-coordinator:v0.4.8-0
-    container_name: coordinator_service
+  coordinator:
+    image: onfinality/subql-coordinator:v0.4.8-8
+    container_name: indexer_coordinator
+    restart: always
     ports:
       - 8000:8000
     depends_on:
       "postgres":
         condition: service_healthy
-    restart: always
     volumes:
-      - /var/tmp/composeFiles:/var/tmp/composeFiles
+      - .projects:/usr/projects
       - /var/run/docker.sock:/var/run/docker.sock
     command:
-      - --network=testnet
+      - --network=testnet             # Change to the network you want to index [testnet | kepler | mainnet]
       - --postgres-host=postgres
-      - --postgres-password=pos_z8X
-      # use the same password in the db config
+      - --postgres-password=pos_z8X   # Change to your postgres password
       - --postgres-port=5432
+      - --secret-key=ThisIsYourSecret # Change to random value and keep same with proxy secret key
       - --port=8000
-      - --debug
+      - --secret=xxfdfg               # Change to your own secret key to encrypt the controller privatekey store in db
+      - --use-prerelease              # Enable to use pre-release version of subql node and query iamges
+      - --mmrPath=/home               # Change to the path where you want to store the poi data
+      - --debug                       # Enable to see more logs
     healthcheck:
       test:
         [
@@ -43,43 +47,75 @@ services:
           "curl",
           "-i",
           "-X POST",
-          "http://coordinator-service:8000/graphql",
+          "http://indexer_coordinator:8000/graphql",
           "-H 'Content-Type: application/json'",
           "-d '{ \"query\": \"query { accountMetadata { network } }\" }'"
         ]
       interval: 5s
       timeout: 5s
       retries: 5
-  proxy-redis:
-    image: redis:7-alpine
-    container_name: coordinator_cache
-    expose:
-      - 6379
-    environment:
-      - ALLOW_EMPTY_PASSWORD=yes
-    healthcheck:
-      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
 
-  proxy-server:
-    image: onfinality/subql-indexer-proxy:v0.3.3
-    container_name: coordinator_proxy
+  redis:
+      image: redis:7-alpine
+      container_name: indexer_cache
+      restart: always
+      expose:
+        - 6379
+      environment:
+        - ALLOW_EMPTY_PASSWORD=yes
+      healthcheck:
+        test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+  proxy:
+    image: onfinality/subql-indexer-proxy:v0.3.3-3
+    container_name: indexer_proxy
+    restart: always
     ports:
       - 80:80
-    restart: always
     command:
-      - --port=80
       - --host=0.0.0.0
+      - --port=80
       - --auth
-      - --debug
-      - --jwt-secret=vOVH6sdmpNWjRRIqCc7rdxs
-      - --network=testnet
+      - --jwt-secret=ThisIsYourJWT                         # change to random value
+      - --service-url=http://indexer_coordinator:8000
+      - --secret-key=xxfdfg                                # keep same with coordinator secret key
+      - --network=testnet                                  # network type, need to be same with coordinator
       - --network-endpoint=https://polygon-mumbai.infura.io/v3/4458cf4d1689497b9a38b1d6bbf05e78
-      - --redis-endpoint=redis://coordinator_cache
-      - --token-duration=8 # query auth token validity [hours]
-      - --secret-key=vOVH6sdmpNWjRRIqCc7rdxs01lwHzfr3
-      - --service-url=http://coordinator-service:8000
+      - --token-duration=8                                 # query auth token validity [hours]
+      - --redis-endpoint=redis://indexer_cache
+      - --metrics-allowlist="0x41526BE3CDe4b0ff39A4A2908Af3527a703E9fDa" # default metrics accounts to collect query status
       - --bootstrap=210.55.152.69:7370
       # - --bootstrap=210.55.152.69:7370 # if more, just add new line
+      # - --pushgateway-endpoint=http://indexer_pushgateway:9091 # the indexer-pushgateway endpoint, if need, uncomment it
+      # - --free-plan=60 # the limit for free query when consumer not has agreement
+      # - --network=testnet # Change to other network
+      # - --network-endpoint=https://polygon-mumbai.infura.io/v3/4458cf4d1689497b9a38b1d6bbf05e78 # Change default network endpoint
+  
+  # prometheus & pushgateway & grafana are for metrics, if need, uncomment it,
+  # DONOT FORGET commment `pushgateway_endpoint` in indexer-proxy, if not need.
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   container_name: indexer_prometheus
+  #   command: --config.file=/etc/prometheus/prometheus.yml
+  #   expose:
+  #     - 9090
+  #   volumes:
+  #     - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  # pushgateway:
+  #   image: prom/pushgateway:latest
+  #   container_name: indexer_pushgateway
+  #   restart: always
+  #   expose:
+  #     - 9091
+
+  # grafana:
+  #   image: grafana/grafana:latest
+  #   container_name: indexer_grafana
+  #   ports:
+  #     - 3000:3000
+  #   environment:
+  #     - GF_SECURITY_ADMIN_PASSWORD=admin
+
 networks:
   default:
-    name: coordinator-service
+    name: indexer_services
