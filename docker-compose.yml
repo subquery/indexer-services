@@ -77,7 +77,6 @@ services:
       - --auth
       - --jwt-secret=ThisIsYourJWT                         # change to random value
       - --service-url=http://indexer_coordinator:8000
-      - --secret-key=xxfdfg                                # keep same with coordinator secret key
       - --network=testnet                                  # network type, need to be same with coordinator
       - --network-endpoint=https://polygon-mumbai.infura.io/v3/4458cf4d1689497b9a38b1d6bbf05e78
       - --token-duration=8                                 # query auth token validity [hours]
