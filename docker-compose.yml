@@ -34,7 +34,6 @@ services:
       - --postgres-host=postgres
       - --postgres-password=pos_z8X   # Change to your postgres password
       - --postgres-port=5432
-      - --secret-key=ThisIsYourSecret # Change to random value and keep same with proxy secret key
       - --port=8000
       - --secret=xxfdfg               # Change to your own secret key to encrypt the controller privatekey store in db
       - --use-prerelease              # Enable to use pre-release version of subql node and query iamges
