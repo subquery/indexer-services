@@ -18,7 +18,7 @@ services:
       retries: 5
 
   coordinator:
-    image: onfinality/subql-coordinator:v0.4.8-8
+    image: onfinality/subql-coordinator:v0.4.8-9
     container_name: indexer_coordinator
     restart: always
     ports:
@@ -37,7 +37,7 @@ services:
       - --port=8000
       - --secret=xxfdfg               # Change to your own secret key to encrypt the controller privatekey store in db
       - --use-prerelease              # Enable to use pre-release version of subql node and query iamges
-      - --mmrPath=/home               # Change to the path where you want to store the poi data
+      - --mmrPath=/usr/projects       # Change to the path where you want to store the poi data
       - --debug                       # Enable to see more logs
     healthcheck:
       test:
@@ -65,7 +65,7 @@ services:
       healthcheck:
         test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
   proxy:
-    image: onfinality/subql-indexer-proxy:v0.3.3-3
+    image: onfinality/subql-indexer-proxy:v0.3.3-4
     container_name: indexer_proxy
     restart: always
     ports:
@@ -86,9 +86,7 @@ services:
       # - --bootstrap=210.55.152.69:7370 # if more, just add new line
       # - --pushgateway-endpoint=http://indexer_pushgateway:9091 # the indexer-pushgateway endpoint, if need, uncomment it
       # - --free-plan=60 # the limit for free query when consumer not has agreement
-      # - --network=testnet # Change to other network
-      # - --network-endpoint=https://polygon-mumbai.infura.io/v3/4458cf4d1689497b9a38b1d6bbf05e78 # Change default network endpoint
-  
+
   # prometheus & pushgateway & grafana are for metrics, if need, uncomment it,
   # DONOT FORGET commment `pushgateway_endpoint` in indexer-proxy, if not need.
   # prometheus:
