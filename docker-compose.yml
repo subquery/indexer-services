@@ -75,20 +75,16 @@ services:
       - --port=80
       - --auth
       - --jwt-secret=ThisIsYourJWT                         # change to random value
-      - --secret-key=xxfdfg                              # keep same with coordinator secret key
+      - --secret-key=xxfdfg                                # keep same with coordinator secret key
       - --service-url=http://indexer_coordinator:8000
       - --network=testnet                                  # network type, need to be same with coordinator
       - --network-endpoint=https://polygon-mumbai.infura.io/v3/4458cf4d1689497b9a38b1d6bbf05e78
       - --token-duration=8                                 # query auth token validity [hours]
       - --redis-endpoint=redis://indexer_cache
-      - --metrics-allowlist="0x41526BE3CDe4b0ff39A4A2908Af3527a703E9fDa" # default metrics accounts to collect query status
-      - --bootstrap=210.55.152.69:7370
-      # - --bootstrap=210.55.152.69:7370 # if more, just add new line
+      # - --bootstrap=210.55.152.69:7370 # if need more seeds, just add new line
       # - --pushgateway-endpoint=http://indexer_pushgateway:9091 # the indexer-pushgateway endpoint, if need, uncomment it
       # - --free-plan=60 # the limit for free query when consumer not has agreement
-      # - --network=testnet # Change to other network
-      # - --network-endpoint=https://polygon-mumbai.infura.io/v3/4458cf4d1689497b9a38b1d6bbf05e78 # Change default network endpoint
-  
+
   # prometheus & pushgateway & grafana are for metrics, if need, uncomment it,
   # DONOT FORGET commment `pushgateway_endpoint` in indexer-proxy, if not need.
   # prometheus:
