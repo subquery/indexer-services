@@ -34,8 +34,9 @@ services:
       - --postgres-host=postgres
       - --postgres-password=pos_z8X   # Change to your postgres password
       - --postgres-port=5432
-      - --port=8000
-      - --secret=xxfdfg               # Change to your own secret key to encrypt the controller privatekey store in db
+      - --port=8000                  
+      - --start-port=3100             # The start port number for the indexer node, by default: 3001
+      - --secret-key=xxfdfg           # Change to your own secret key to encrypt the controller privatekey store in db
       - --use-prerelease              # Enable to use pre-release version of subql node and query iamges
       - --mmrPath=/home               # Change to the path where you want to store the poi data
       - --debug                       # Enable to see more logs
@@ -70,6 +71,9 @@ services:
     restart: always
     ports:
       - 80:80
+    depends_on:
+      "coordinator":
+        condition: service_healthy
     command:
       - --host=0.0.0.0
       - --port=80
@@ -78,40 +82,9 @@ services:
       - --secret-key=xxfdfg                                # keep same with coordinator secret key
       - --service-url=http://indexer_coordinator:8000
       - --network=testnet                                  # network type, need to be same with coordinator
-      - --network-endpoint=https://polygon-mumbai.infura.io/v3/4458cf4d1689497b9a38b1d6bbf05e78
+      - --network-endpoint=https://polygon-rpc.com         # network endpoint, can choose your own endpoint
       - --token-duration=8                                 # query auth token validity [hours]
       - --redis-endpoint=redis://indexer_cache
-      - --metrics-token=thisismyAuthtoken                  # change to random value, and keep same with prometheus/prometheus.yml bearer_token
-      # - --bootstrap=210.55.152.69:7370 # if need more seeds, just add new line
-      # - --free-plan=60 # the limit for free query when consumer not has agreement
-
-  ## prometheus & pushgateway & grafana are for metrics, if need, uncomment it,
-  # prometheus:
-  #   image: prom/prometheus:latest
-  #   container_name: indexer_prometheus
-  #   restart: unless-stopped
-  #   volumes:
-  #     - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-  #   command:
-  #     - '--config.file=/etc/prometheus/prometheus.yml'
-  #     - '--storage.tsdb.path=/prometheus'
-  #   ports:
-  #     - 9090:9090
-
-  # grafana:
-  #   image: grafana/grafana:latest
-  #   container_name: indexer_grafana
-  #   restart: unless-stopped
-  #   volumes:
-  #     - ./grafana/provisioning:/etc/grafana/provisioning
-  #   environment:
-  #     - GF_SECURITY_ADMIN_USER=admin
-  #     - GF_SECURITY_ADMIN_PASSWORD=admin
-  #     - GF_USERS_ALLOW_SIGN_UP=false
-  #   depends_on:
-  #     - prometheus
-  #   ports:
-  #     - 3000:3000
 
 networks:
   default:
