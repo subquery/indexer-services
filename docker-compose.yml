@@ -32,6 +32,7 @@ services:
     command:
       - --network=kepler              # Change to the network you want to index [testnet | kepler | mainnet]
       - --postgres-host=postgres
+      - --ws-endpoint=https://polygon-rpc.com
       - --postgres-password=pos_z8X   # Change to your postgres password
       - --postgres-port=5432
       - --port=8000                  
