@@ -70,6 +70,7 @@ services:
     container_name: indexer_proxy
     restart: always
     ports:
+      - 7370:7370/udp
       - 80:80
     depends_on:
       "coordinator":
