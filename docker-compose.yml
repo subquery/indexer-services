@@ -81,7 +81,7 @@ services:
       - --jwt-secret=ThisIsYourJWT                         # change to any random string value
       - --secret-key=xxfdfg                                # keep same with coordinator secret key
       - --service-url=http://indexer_coordinator:8000
-      - --network-endpoint=https://polygon-rpc.com         # network endpoint, can choose your own endpoint
+      - --network-endpoint=https://polygon.api.onfinality.io/public         # network endpoint, can choose your own endpoint
       - --token-duration=24                                # query auth token validity [hours]
       - --redis-endpoint=redis://indexer_cache
 
