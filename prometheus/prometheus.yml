@@ -1,0 +1,18 @@
+global:
+  scrape_interval:     10s
+  evaluation_interval: 10s
+
+scrape_configs:
+  - job_name: query_count
+    metrics_path: /metrics-count
+    scheme: http
+    bearer_token: 'thisismyAuthtoken' # this is proxy metrics-token
+    static_configs:
+      - targets: ['localhost:80']   # this is proxy endpoint
+
+  - job_name: query_time
+    metrics_path: /metrics-time
+    scheme: http
+    bearer_token: 'thisismyAuthtoken' # this is proxy metrics-token
+    static_configs:
+      - targets: ['localhost:80']   # this is proxy endpoint
