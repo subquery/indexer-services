@@ -7,11 +7,11 @@ scrape_configs:
     metrics_path: /metrics
     scheme: http
     static_configs:
-      - targets: ['host.docker.internal:8001']
+      - targets: ['host.docker.internal:8001'] # this is targeting coordinator endpoint.
 
   - job_name: query_count
     metrics_path: /metrics
     scheme: http
     bearer_token: 'thisismyAuthtoken'          # this is proxy metrics-token
     static_configs:
-      - targets: ['host.docker.internal:80']   # this is proxy endpoint
+      - targets: ['host.docker.internal:80']   # this is proxy endpoint, please update if running somewhere else

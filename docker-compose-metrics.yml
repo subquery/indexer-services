@@ -16,7 +16,7 @@ grafana:
     - ./metrics/datasources:/etc/grafana/provisioning/datasources
     - ./metrics/dashboards:/etc/grafana/provisioning/dashboards
   environment:
-    - GF_SECURITY_ADMIN_PASSWORD=admin
+    - GF_SECURITY_ADMIN_PASSWORD=admin # Update this password for Grafana login
 
 networks:
   default:
