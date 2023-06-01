@@ -18,7 +18,7 @@ services:
       retries: 5
 
   coordinator:
-    image: onfinality/subql-coordinator:v1.0.4
+    image: onfinality/subql-coordinator:v1.0.6
     container_name: indexer_coordinator
     restart: always
     ports:
@@ -66,7 +66,7 @@ services:
         test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
 
   proxy:
-    image: onfinality/subql-indexer-proxy:v1.1.0-beta.0
+    image: onfinality/subql-indexer-proxy:v1.1.0
     container_name: indexer_proxy
     restart: always
     ports:
@@ -92,7 +92,7 @@ services:
 
   # prometheus:
   #   image: prom/prometheus:latest
-  #   container_name: indexer_prometheus_dev
+  #   container_name: indexer_prometheus
   #   volumes:
   #     - ./metrics/prometheus.yml:/etc/prometheus/prometheus.yml
   #   command: --config.file=/etc/prometheus/prometheus.yml
@@ -101,7 +101,7 @@ services:
 
   # grafana:
   #   image: grafana/grafana:latest
-  #   container_name: indexer_grafana_dev
+  #   container_name: indexer_grafana
   #   ports:
   #     - 3000:3000
   #   volumes:
