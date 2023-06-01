@@ -7,7 +7,7 @@ scrape_configs:
     metrics_path: /metrics
     scheme: http
     static_configs:
-      - targets: ['host.docker.internal:8001'] # this is targeting coordinator endpoint.
+      - targets: ['host.docker.internal:8000'] # this is targeting coordinator endpoint.
 
   - job_name: query_count
     metrics_path: /metrics
