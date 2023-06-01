@@ -22,4 +22,4 @@ static_configs:
 After you've made the necessary adjustments, you can run the following command:
 
 ```bash
-docker-compose -f docker-compose-metrics.yml up
+docker-compose -f docker-compose-metrics.yml up -d
