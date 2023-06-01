@@ -12,7 +12,12 @@ There are several areas where you should change your password:
 
 After initializing the `docker-compose.yml` file, you can proceed to set up the Grafana dashboard. 
 
-> **Important:** If your indexer proxy is being run somewhere other than the default location, please update the `metrics/prometheus.yml` file accordingly.
+> **Important:** If your indexer proxy is running on another port, you will need to update this section in the `metrics/prometheus.yml` file.
+
+``` yml
+static_configs:
+    - targets: ['host.docker.internal:80'] # this is proxy endpoint
+```
 
 After you've made the necessary adjustments, you can run the following command:
 
