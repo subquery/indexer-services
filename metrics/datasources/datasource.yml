@@ -1,4 +1,3 @@
-# grafana/provisioning/datasources/datasource.yml
 apiVersion: 1
 
 datasources:
@@ -6,3 +5,5 @@ datasources:
     type: prometheus
     access: proxy
     url: http://indexer_prometheus:9090
+    headers:
+      Authorization: Bearer thisismyAuthtoken
