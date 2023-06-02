@@ -28,6 +28,350 @@
   "liveNow": false,
   "panels": [
     {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 16,
+      "panels": [],
+      "title": "Docker Health Status",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "#6c6c6c",
+                  "index": 0,
+                  "text": "Unknown"
+                },
+                "1": {
+                  "color": "red",
+                  "index": 1,
+                  "text": "Exited"
+                },
+                "2": {
+                  "color": "red",
+                  "index": 2,
+                  "text": "Dead"
+                },
+                "3": {
+                  "color": "dark-orange",
+                  "index": 3,
+                  "text": "Paused"
+                },
+                "4": {
+                  "color": "blue",
+                  "index": 4,
+                  "text": "Restarting"
+                },
+                "5": {
+                  "color": "red",
+                  "index": 5,
+                  "text": "Unhealthy"
+                },
+                "6": {
+                  "color": "green",
+                  "index": 6,
+                  "text": "Healthy"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 0,
+        "y": 1
+      },
+      "id": 17,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.5.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "editorMode": "builder",
+          "expr": "coordinator_docker_stats_status{job=\"query_docker_stats\"}",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Coordinator Health Status",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "#6c6c6c",
+                  "index": 0,
+                  "text": "Unknown"
+                },
+                "1": {
+                  "color": "#F2495C",
+                  "index": 1,
+                  "text": "Exited"
+                },
+                "2": {
+                  "color": "red",
+                  "index": 2,
+                  "text": "Dead"
+                },
+                "3": {
+                  "color": "dark-orange",
+                  "index": 3,
+                  "text": "Paused"
+                },
+                "4": {
+                  "color": "blue",
+                  "index": 4,
+                  "text": "Restarting"
+                },
+                "5": {
+                  "color": "red",
+                  "index": 5,
+                  "text": "Unhealthy"
+                },
+                "6": {
+                  "color": "green",
+                  "index": 6,
+                  "text": "Healthy"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 4,
+        "y": 1
+      },
+      "id": 18,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.5.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "editorMode": "builder",
+          "expr": "db_docker_stats_status{job=\"query_docker_stats\"}",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Postgres Health Status",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PBFA97CFB590B2093"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "color": "#6c6c6c",
+                  "index": 0,
+                  "text": "Unknown"
+                },
+                "1": {
+                  "color": "red",
+                  "index": 1,
+                  "text": "Exited"
+                },
+                "2": {
+                  "color": "red",
+                  "index": 2,
+                  "text": "Dead"
+                },
+                "3": {
+                  "color": "dark-orange",
+                  "index": 3,
+                  "text": "Paused"
+                },
+                "4": {
+                  "color": "blue",
+                  "index": 4,
+                  "text": "Restarting"
+                },
+                "5": {
+                  "color": "red",
+                  "index": 5,
+                  "text": "Unhealthy"
+                },
+                "6": {
+                  "color": "green",
+                  "index": 6,
+                  "text": "Healthy"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 4,
+        "x": 8,
+        "y": 1
+      },
+      "id": 19,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.5.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PBFA97CFB590B2093"
+          },
+          "editorMode": "builder",
+          "expr": "proxy_docker_stats_status{job=\"query_docker_stats\"}",
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Proxy Health Status",
+      "type": "stat"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 6
+      },
+      "id": 15,
+      "panels": [],
+      "title": "Application Versions",
+      "type": "row"
+    },
+    {
       "datasource": {
         "type": "prometheus",
         "uid": "PBFA97CFB590B2093"
@@ -67,10 +411,11 @@
         "h": 6,
         "w": 12,
         "x": 0,
-        "y": 0
+        "y": 7
       },
       "id": 14,
       "options": {
+        "cellHeight": "sm",
         "footer": {
           "countRows": false,
           "fields": "",
@@ -82,7 +427,7 @@
         "frameIndex": 0,
         "showHeader": true
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -158,7 +503,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 6
+        "y": 13
       },
       "id": 11,
       "panels": [],
@@ -198,7 +543,7 @@
         "h": 5,
         "w": 4,
         "x": 0,
-        "y": 7
+        "y": 14
       },
       "id": 9,
       "options": {
@@ -215,7 +560,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -265,7 +610,7 @@
         "h": 5,
         "w": 4,
         "x": 4,
-        "y": 7
+        "y": 14
       },
       "id": 12,
       "options": {
@@ -282,7 +627,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -332,7 +677,7 @@
         "h": 5,
         "w": 4,
         "x": 8,
-        "y": 7
+        "y": 14
       },
       "id": 13,
       "options": {
@@ -349,7 +694,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -372,7 +717,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 12
+        "y": 19
       },
       "id": 4,
       "panels": [],
@@ -412,7 +757,7 @@
         "h": 5,
         "w": 4,
         "x": 0,
-        "y": 13
+        "y": 20
       },
       "id": 2,
       "options": {
@@ -429,7 +774,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -479,7 +824,7 @@
         "h": 5,
         "w": 4,
         "x": 4,
-        "y": 13
+        "y": 20
       },
       "id": 7,
       "options": {
@@ -496,7 +841,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -546,7 +891,7 @@
         "h": 5,
         "w": 4,
         "x": 8,
-        "y": 13
+        "y": 20
       },
       "id": 8,
       "options": {
@@ -563,7 +908,7 @@
         },
         "textMode": "auto"
       },
-      "pluginVersion": "9.4.3",
+      "pluginVersion": "9.5.1",
       "targets": [
         {
           "datasource": {
@@ -581,7 +926,7 @@
       "type": "stat"
     }
   ],
-  "refresh": "",
+  "refresh": "10s",
   "revision": 1,
   "schemaVersion": 38,
   "style": "dark",
