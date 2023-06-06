@@ -2,24 +2,28 @@
 
 ## Changing Passwords
 
-There are several areas where you should change your password:
+There are several passwords you need to update in `docker-compose.yml`:
 
-1. Within the containers in the `docker-compose.yaml` file. Follow the comments provided in the file for instructions on how to do this.
+- Your `POSTGRES_PASSWORD` under your postgres container, as well as `--postgres-password` under coordinator container.
 
-2. For the `GF_SECURITY_ADMIN_PASSWORD` password in the Grafana container, which is in the `docker-compose-metrics.yml` file.
+- Your `--secret-key` under both coordinator and proxy containers.
 
-## Viewing the Grafana Dashboard
+- Your `--jwt-secret` and `--metrics-token` under proxy container.
 
-After initializing the `docker-compose.yml` file, you can proceed to set up the Grafana dashboard. 
+## Things to update when using Grafana Dashboard
+
+- The `GF_SECURITY_ADMIN_PASSWORD` password in the Grafana container, which is in the `docker-compose-metrics.yml` file. 
+This is for logging in to the Grafana dashboard.
+
+- Update the Authorization token inside `./metrics/datasources/datasource.yml` which needs to be the same as your `--metrics-token` specified inside `docker-compose.yml` under your proxy container.
+
+- Update the `bearer_token` inside `./metrics/prometheus.yml`. It should also be the same as `--metrics-token`.
 
 > **Important:** If your indexer proxy is running on another port, you will need to update this section in the `metrics/prometheus.yml` file.
 
-``` yml
-static_configs:
-    - targets: ['host.docker.internal:80'] # this is proxy endpoint
-```
+## Viewing the Grafana Dashboard
 
-After you've made the necessary adjustments, you can run the following command:
+After update both `docker-compose.yml` and `docker-compose-metrics.yml`, you can proceed to starting up your Grafana dashboard. 
 
 ```bash
 docker-compose -f docker-compose-metrics.yml up -d
