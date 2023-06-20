@@ -19,7 +19,11 @@ This is for logging in to the Grafana dashboard.
 
 - Update the `bearer_token` inside `./metrics/prometheus.yml`. It should also be the same as `--metrics-token`.
 
-> **Important:** If your indexer proxy is running on another port, you will need to update this section in the `metrics/prometheus.yml` file.
+- If you are running on linux `host.docker.internal` isn't supported so you need to specify the exact <ip>:<port> of the container in `metrics/prometheus.yml`
+
+You can get the ip which you can get with the following command:
+
+docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' <container_name>
 
 ## Viewing the Grafana Dashboard
 
