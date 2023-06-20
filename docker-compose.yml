@@ -18,7 +18,7 @@ services:
       retries: 5
 
   coordinator:
-    image: onfinality/subql-coordinator:v1.0.4
+    image: onfinality/subql-coordinator:v1.1.0
     container_name: indexer_coordinator
     restart: always
     ports:
@@ -66,7 +66,7 @@ services:
         test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
 
   proxy:
-    image: onfinality/subql-indexer-proxy:v1.0.0
+    image: onfinality/subql-indexer-proxy:v1.1.1
     container_name: indexer_proxy
     restart: always
     ports:
@@ -86,6 +86,12 @@ services:
       - --network-endpoint=https://polygon-rpc.com         # network endpoint, can choose your own endpoint
       - --token-duration=24                                # query auth token validity [hours]
       - --redis-endpoint=redis://indexer_cache
+      - --metrics-token=thisismyAuthtoken                  # change to any random string value
+    healthcheck:
+      test: ["CMD-SHELL", "curl http://localhost:80/healthy >/dev/null 2>&1 || exit 1"]
+      interval: 30s
+      timeout: 30s
+      retries: 5
 
 networks:
   default:
