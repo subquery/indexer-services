@@ -40,7 +40,7 @@ services:
       - --port=8000                  
       - --start-port=3100             # The start port number for the indexer node, by default: 3001
       - --secret-key=xxfdfg           # Change to your own secret key to encrypt the controller privatekey which store in db
-      - --mmrPath=''                  # Change to the path where you want to store the poi data
+      - --mmrPath=/home               # Change to the path where you want to store the poi data
       - --ipfs=http://indexer_ipfs:8080/api/v0/ # Use docker/local ipfs endpoint
     healthcheck:
       test:
