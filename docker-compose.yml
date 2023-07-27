@@ -97,7 +97,7 @@ services:
       retries: 5
 
   ipfs:
-    image: ipfs/kubo:master-2023-07-20-1fe17a4
+    image: ipfs/kubo:v0.20.0
     container_name: indexer_ipfs
     volumes:
       - .data/ipfs/export:/export
