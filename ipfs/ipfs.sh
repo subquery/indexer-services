@@ -1,5 +1,5 @@
 #!/bin/sh
-set -ex
+set -x
 
 addPeers() {
   sleep $1;

@@ -100,6 +100,8 @@ services:
   ipfs:
     image: ipfs/kubo:v0.20.0
     container_name: indexer_ipfs
+    environment:
+      IPFS_PROFILE: server
     volumes:
       - .data/ipfs/export:/export
       - .data/ipfs/data:/data/ipfs
