@@ -10,6 +10,16 @@ There are several passwords you need to update in `docker-compose.yml`:
 
 - Your `--jwt-secret` and `--metrics-token` under proxy container.
 
+## Script for IPFS
+
+If you directly download the docker-compose.yml file, you can use the following command to fetch a shell script that adds peers and accelerates data retrieval from IPFS. This script file will be automatically executed when the IPFS container starts up.
+
+```bash
+# Make sure you are currently in the same directory as the docker-compose.yml file.
+mkdir ./ipfs
+curl -o ./ipfs/ipfs.sh https://raw.githubusercontent.com/subquery/indexer-services/kepler/ipfs/ipfs.sh
+```
+
 ## Things to update when using Grafana Dashboard
 
 - The `GF_SECURITY_ADMIN_PASSWORD` password in the Grafana container, which is in the `docker-compose-metrics.yml` file. 
